@@ -39,13 +39,36 @@ def get_gdp():
         # Reverse to get oldest -> newest
         gdp_data.reverse()
 
+        summary = summarize_gdp(gdp_data)
+
         return jsonify({
                 'country': gdp_entries[0]['country']['value'],
-                'gdp_data': gdp_data
+                'gdp_data': gdp_data,
+                'summary': summary
             })
     
     except Exception as e:
             return jsonify({'error': f'Unexpected error: {str(e)}'}), 500
+
+def summarize_gdp(data):
+    # data: list of dicts with 'year' and 'value', sorted oldest -> newest
+    start = data[0]['value']
+    end = data[-1]['value']
+    years = len(data) - 1
+    if not start or not end or years == 0:
+        return "Insufficient data for summary."
+
+    growth = ((end - start) / start) * 100
+    avg_growth = growth / years
+
+    trend = "increased 📈" if growth > 0 else "decreased 📉" if growth < 0 else "remained stable ➖"
+
+    summary = (
+        f"From {data[0]['year']} to {data[-1]['year']}, GDP {trend} "
+        f"by {abs(growth):.2f}%, averaging {abs(avg_growth):.2f}% growth per year."
+    )
+    return summary
+
     
-    if __name__ == '__main__':
+if __name__ == '__main__':
         app.run(debug=True)

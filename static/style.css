@@ -1,0 +1,82 @@
+body {
+  font-family: Arial, sans-serif;
+  padding: 2rem;
+  background: 	#a2d2ff; 
+}
+
+h1 {
+  color: #333;
+}
+
+select, button {
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+button {
+  margin-left: 0.5rem;
+  cursor: pointer;
+}
+
+#result {
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+canvas {
+  margin-top: 2rem;
+  background: rgb(222, 219, 242);
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+  body {
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    font-family: Arial, sans-serif;
+    color: #fff;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
+
+  .overlay {
+    background-color: rgba(0, 0, 0, 0.6); /* darken for contrast */
+    min-height: 100vh;
+    padding: 2rem;
+  }
+
+  .container {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    border-radius: 10px;
+    max-width: 700px;
+    margin: 3rem auto;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    color: #fff;
+  }
+
+  h1 {
+    text-align: center;
+    color: #f4a261;
+  }
+
+  canvas {
+    background: #fff;
+    border-radius: 8px;
+    padding: 1rem;
+  }
+
+  select, button {
+    margin: 1rem 0;
+    padding: 0.5rem;
+    font-size: 1rem;
+  }
+
+  #result {
+    margin-top: 1rem;
+    font-weight: bold;
+  }
