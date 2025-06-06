@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GDP Tracker</title>
+</head>
+<body>
+  <h1>🌍 GDP Tracker</h1>
+  <label for="country">Select a country:</label>
+  <select id="country">
+    <option value="KEN">Kenya</option>
+    <option value="USA">USA</option>
+    <option value="CHN">China</option>
+    <option value="IND">India</option>
+  </select>
+  <button onclick="fetchGDP()">Get GDP</button>
+  <div id="result"></div>
+
+  <canvas id="chart" width="400" height="200"></canvas>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
