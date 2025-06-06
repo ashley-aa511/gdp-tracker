@@ -13,7 +13,6 @@ def get_gdp():
     if not country_code:
         return jsonify({'error': 'No country code provided'}), 400
 
-    # Ask for 100 entries to get more historical GDP values
     url = f"https://api.worldbank.org/v2/country/{country_code}/indicator/NY.GDP.MKTP.CD?format=json&per_page=100"
     response = requests.get(url)
 
@@ -24,16 +23,29 @@ def get_gdp():
 
     try:
         gdp_entries = data[1]
-        # Loop through and find the first non-null GDP
-        for entry in gdp_entries:
-            if entry['value'] is not None:
-                return jsonify({
-                    'gdp': entry['value'],
-                    'year': entry['date'],
-                    'country': entry['country']['value']
-                })
-        return jsonify({'error': 'No non-null GDP data found'}), 404
+        # Get last 5 non-null GDP values
+        gdp_data = [
+            {
+                'year': entry['date'],
+                'value': entry['value']
+            }
+            for entry in gdp_entries
+            if entry['value'] is not None
+        ][:5]
+
+        if not gdp_data:
+            return jsonify({'error': 'No valid GDP data found'}), 404
+
+        # Reverse to get oldest -> newest
+        gdp_data.reverse()
+
+        return jsonify({
+                'country': gdp_entries[0]['country']['value'],
+                'gdp_data': gdp_data
+            })
+    
     except Exception as e:
-        return jsonify({'error': f'Unexpected error: {str(e)}'}), 500
-if __name__ == '__main__':
-    app.run(debug=True)
+            return jsonify({'error': f'Unexpected error: {str(e)}'}), 500
+    
+    if __name__ == '__main__':
+        app.run(debug=True)

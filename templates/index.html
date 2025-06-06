@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>GDP Tracker</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 <body>
   <h1>🌍 GDP Tracker</h1>
@@ -17,6 +19,8 @@
   <div id="result"></div>
 
   <canvas id="chart" width="400" height="200"></canvas>
+  <canvas id="gdpChart" width="600" height="400"></canvas>
+
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="{{ url_for('static', filename='script.js') }}"></script>

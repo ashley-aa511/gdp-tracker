@@ -40,3 +40,55 @@ function fetchGDP() {
       console.error(err);
     });
 }
+
+let chart; // store reference to chart instance
+
+document.getElementById('countrySelect').addEventListener('change', function () {
+    const country = this.value;
+
+    fetch(`/get_gdp?country=${country}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.error) {
+                document.getElementById('result').innerText = `Error: ${data.error}`;
+                return;
+            }
+
+            const labels = data.gdp_data.map(entry => entry.year);
+            const values = data.gdp_data.map(entry => entry.value);
+
+            document.getElementById('result').innerText = 
+                `GDP data for ${data.country} (${labels.join(', ')}):`;
+
+            // Destroy previous chart if it exists
+            if (chart) chart.destroy();
+
+            const ctx = document.getElementById('gdpChart').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'bar', // or 'line'
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: `GDP (USD)`,
+                        data: values,
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function (value) {
+                                    return '$' + (value / 1e9).toFixed(1) + 'B';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+});
