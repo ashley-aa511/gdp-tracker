@@ -2,27 +2,55 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>GDP Tracker</title>
+  <title>🌍 GDP Tracker</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <h1>🌍 GDP Tracker</h1>
+  <h1>🌍 GDP & Economic Data Tracker</h1>
 
-  <label for="countrySelect">Choose a country:</label>
-  <select id="countrySelect">
-    <option value="USA">United States</option>
-    <option value="KEN">Kenya</option>
-    <option value="CHN">China</option>
-    <option value="IND">India</option>
-    <option value="NGA">Nigeria</option>
-  </select>
-  <button id="getGdpBtn">Get GDP</button>
+  <div> 
+    <p>Welcome to the GDP Tracker! This tool allows you to explore economic indicators for various countries. Select a country and an indicator to get started.</p>
+    <p>For more information, visit our <a href="https://data.worldbank.org/" target="_blank">data source</a>.</p> 
+  <div style="margin-bottom: 1rem;">
+    <label for="countrySelect">Choose a country:</label>
+    <select id="countrySelect">
+      <option value="USA">United States</option>
+      <option value="KEN">Kenya</option>
+      <option value="CHN">China</option>
+      <option value="IND">India</option>
+      <option value="NGA">Nigeria</option>
+    </select>
+  </div>
 
+  <div style="margin-bottom: 1rem;">
+    <label for="indicatorSelect">Choose an indicator:</label>
+    <select id="indicatorSelect">
+      <option value="NY.GDP.MKTP.CD">GDP (Current USD)</option>
+      <option value="NY.GDP.PCAP.CD">GDP per capita</option>
+      <option value="FP.CPI.TOTL.ZG">Inflation (% annual)</option>
+      <option value="SL.UEM.TOTL.ZS">Unemployment (% of labor force)</option>
+    </select>
+  </div>
+  </div>
 
-  <div id="result"></div>
-  <canvas id="gdpChart" width="400" height="200"></canvas>
-  <p id="summary" style="margin-top: 1rem; font-style: italic; color: #444;  background-color: #b96eff;"></p>
+  <div style="margin-bottom: 1.5rem;">
+    <button id="getDataBtn">Get Data</button>
+  </div>
+
+  <div id="result" style="margin-bottom: 1rem;"></div>
+
+  <canvas id="gdpChart" width="600" height="300" style="max-width: 100%;"></canvas>
+
+  <p id="summary" style="margin-top: 1rem; font-style: italic; color: #444; background-color: #2e8bc0; padding: 0.5rem; border-radius: 8px;"></p>
+
+  <div id="didYouKnow" style="margin-top: 1.5rem; padding: 1rem; border-left: 4px solid #75e6da; background: #2e8bc0;">
+  <strong>💡 Did you know?</strong>
+  <p id="factText">Loading fact...</p>
+  <button id="refreshFactBtn" style="margin-top: 0.5rem; padding: 6px 12px; background: #00aaff; color: white; border: none; border-radius: 4px; cursor: pointer;">
+    🔁 Refresh Fact
+  </button>
+</div>
 
   <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>

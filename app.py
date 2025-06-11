@@ -7,13 +7,15 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-@app.route('/get_gdp')
-def get_gdp():
+@app.route('/get_economic_data')
+def get_economic_data():
     country_code = request.args.get('country')
-    if not country_code:
-        return jsonify({'error': 'No country code provided'}), 400
+    indicator = request.args.get('indicator')
 
-    url = f"https://api.worldbank.org/v2/country/{country_code}/indicator/NY.GDP.MKTP.CD?format=json&per_page=100"
+    if not country_code or not indicator:
+        return jsonify({'error': 'Missing country or indicator parameter'}), 400
+
+    url = f"https://api.worldbank.org/v2/country/{country_code}/indicator/{indicator}?format=json&per_page=100"
     response = requests.get(url)
 
     if response.status_code != 200:
@@ -22,36 +24,30 @@ def get_gdp():
     data = response.json()
 
     try:
-        gdp_entries = data[1]
-        # Get last 5 non-null GDP values
-        gdp_data = [
-            {
-                'year': entry['date'],
-                'value': entry['value']
-            }
-            for entry in gdp_entries
-            if entry['value'] is not None
-        ][:5]
+        entries = data[1]
+        # Filter out nulls and keep latest 60 years (or all available)
+        clean_data = [
+            {'year': entry['date'], 'value': entry['value']}
+            for entry in entries if entry['value'] is not None
+        ]
+        clean_data.reverse()  # So oldest -> newest
 
-        if not gdp_data:
-            return jsonify({'error': 'No valid GDP data found'}), 404
+        if not clean_data:
+            return jsonify({'error': 'No valid data found'}), 404
 
-        # Reverse to get oldest -> newest
-        gdp_data.reverse()
-
-        summary = summarize_gdp(gdp_data)
+        summary = summarize(clean_data)
 
         return jsonify({
-                'country': gdp_entries[0]['country']['value'],
-                'gdp_data': gdp_data,
-                'summary': summary
-            })
-    
-    except Exception as e:
-            return jsonify({'error': f'Unexpected error: {str(e)}'}), 500
+            'country': entries[0]['country']['value'],
+            'indicator': entries[0]['indicator']['value'],
+            'data': clean_data,
+            'summary': summary
+        })
 
-def summarize_gdp(data):
-    # data: list of dicts with 'year' and 'value', sorted oldest -> newest
+    except Exception as e:
+        return jsonify({'error': f'Unexpected error: {str(e)}'}), 500
+
+def summarize(data):
     start = data[0]['value']
     end = data[-1]['value']
     years = len(data) - 1
@@ -64,11 +60,10 @@ def summarize_gdp(data):
     trend = "increased 📈" if growth > 0 else "decreased 📉" if growth < 0 else "remained stable ➖"
 
     summary = (
-        f"From {data[0]['year']} to {data[-1]['year']}, GDP {trend} "
-        f"by {abs(growth):.2f}%, averaging {abs(avg_growth):.2f}% growth per year."
+        f"From {data[0]['year']} to {data[-1]['year']}, this indicator {trend} "
+        f"by {abs(growth):.2f}%, averaging {abs(avg_growth):.2f}% per year."
     )
     return summary
 
-    
 if __name__ == '__main__':
-        app.run(debug=True)
+    app.run(debug=True)

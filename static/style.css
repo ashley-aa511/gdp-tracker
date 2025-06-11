@@ -31,17 +31,17 @@ canvas {
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-  body {
-    background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    font-family: Arial, sans-serif;
-    color: #fff;
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
-  }
+ body {
+  background: 
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+    url('https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg') center/cover no-repeat;
+  font-family: Arial, sans-serif;
+  color: #fff;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
 
   .overlay {
     background-color: rgba(0, 0, 0, 0.6); /* darken for contrast */
@@ -61,7 +61,7 @@ canvas {
 
   h1 {
     text-align: center;
-    color: #f4a261;
+    color: #274472;
   }
 
   canvas {
@@ -80,3 +80,28 @@ canvas {
     margin-top: 1rem;
     font-weight: bold;
   }
+
+@media (max-width: 600px) {
+  body {
+    padding: 1rem;
+  }
+
+  .container {
+    padding: 1rem;
+    margin: 1rem auto;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  select, button {
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+
+  canvas {
+    width: 100%;
+    height: auto;
+  }
+}
